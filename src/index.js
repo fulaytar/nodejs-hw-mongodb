@@ -1,1 +1,3 @@
-console.log('new branch');
+import setupServer from './server.js';
+
+setupServer();
