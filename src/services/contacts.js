@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import { Contact } from '../db/ShemaContacts.js';
+import { Contact } from '../db/shemaContacts.js';
 
 export const getContacts = async (req, res) => {
   try {
