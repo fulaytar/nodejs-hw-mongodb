@@ -5,7 +5,7 @@ import contactsRouter from './routers/contactRouters.js';
 import logger from './middlewares/logger.js';
 
 import errorHandler from './middlewares/errorHandler.js';
-import notFoundHandler from './middlewares/notFoundHandler.js';
+import { notFoundHandler } from './middlewares/notFoundHandler.js';
 
 const port = env('PORT', '3000');
 
@@ -17,7 +17,7 @@ const setupServer = () => {
   app.use(cors());
 
   app.use('/contacts', contactsRouter);
-
+  console.log(notFoundHandler);
   app.use(notFoundHandler);
   app.use(errorHandler);
 
