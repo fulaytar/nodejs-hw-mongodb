@@ -17,7 +17,7 @@ const setupServer = () => {
 
   app.use('/contacts', contactsRouter);
 
-  app.use(NotFoundHandler);
+  app.use('*', NotFoundHandler);
   app.use(errorHandler);
 
   app.listen(port, () => console.log(`Server running on port ${port}`));

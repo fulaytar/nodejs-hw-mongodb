@@ -3,4 +3,5 @@ const NotFoundHandler = (req, res) => {
     message: 'Route not found',
   });
 };
+
 export default NotFoundHandler;
