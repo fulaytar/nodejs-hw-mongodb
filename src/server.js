@@ -12,12 +12,12 @@ const setupServer = () => {
   const app = express();
 
   app.use(logger);
-  app.use(cors());
   app.use(express.json()); // don`t forget
+  app.use(cors());
 
   app.use('/contacts', contactsRouter);
 
-  app.use('*', notFoundHandler);
+  app.use(notFoundHandler);
   app.use(errorHandler);
 
   app.listen(port, () => console.log(`Server running on port ${port}`));
