@@ -4,6 +4,7 @@ import express from 'express';
 import env from './utils/env.js';
 import contactsRouter from './routers/contactRouters.js';
 import logger from './middlewares/logger.js';
+import { notFoundHandler } from './middlewares/notFoundHandler.js';
 import errorHandler from './middlewares/errorHandler.js';
 
 const port = env('PORT', '3000');
@@ -17,11 +18,7 @@ const setupServer = () => {
 
   app.use('/contacts', contactsRouter);
 
-  app.use((req, res) => {
-    res.status(404).json({
-      message: 'Route not found',
-    });
-  });
+  app.use(notFoundHandler);
   app.use(errorHandler);
 
   app.listen(port, () => console.log(`Server running on port ${port}`));
