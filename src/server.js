@@ -1,4 +1,4 @@
-import notFoundHandler from './middlewares/notFoundHandler.js';
+/* import notFoundHandler from './middlewares/notFoundHandler.js'; */
 import cors from 'cors';
 import express from 'express';
 import env from './utils/env.js';
@@ -17,7 +17,11 @@ const setupServer = () => {
 
   app.use('/contacts', contactsRouter);
 
-  app.use(notFoundHandler);
+  app.use((req, res) => {
+    res.status(404).json({
+      message: 'Route not found',
+    });
+  });
   app.use(errorHandler);
 
   app.listen(port, () => console.log(`Server running on port ${port}`));
