@@ -4,11 +4,15 @@ import {
   getContactsController,
 } from '../controllers/contacts.js';
 import ctrlWrapper from '../utils/ctrlWrapper.js';
+import isValidId from '../middlewares/isValidId.js';
 
 const contactsRouter = express.Router();
 
 contactsRouter.get('/', ctrlWrapper(getContactsController));
-contactsRouter.get('/:contactId', ctrlWrapper(getContactsByIdController));
-
+contactsRouter.get(
+  '/:contactId',
+  isValidId,
+  ctrlWrapper(getContactsByIdController),
+);
 
 export default contactsRouter;
