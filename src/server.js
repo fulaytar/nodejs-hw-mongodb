@@ -1,4 +1,4 @@
-import NotFoundHandler from './middlewares/notFoundHandler.js';
+import notFoundHandler from './middlewares/notFoundHandler.js';
 import cors from 'cors';
 import express from 'express';
 import env from './utils/env.js';
@@ -17,7 +17,7 @@ const setupServer = () => {
 
   app.use('/contacts', contactsRouter);
 
-  app.use(NotFoundHandler);
+  app.use(notFoundHandler);
   app.use(errorHandler);
 
   app.listen(port, () => console.log(`Server running on port ${port}`));
