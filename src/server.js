@@ -1,10 +1,10 @@
 import cors from 'cors';
 import express from 'express';
 import env from './utils/env.js';
-import NotFoundHandler from './middlewares/notFoundHandler.js';
 import contactsRouter from './routers/contactRouters.js';
 import logger from './middlewares/logger.js';
 import errorHandler from './middlewares/errorHandler.js';
+import NotFoundHandler from './middlewares/notFoundHandler.js';
 
 const port = env('PORT', '3000');
 
