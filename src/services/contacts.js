@@ -1,43 +1,40 @@
-import mongoose from 'mongoose';
 import { Contact } from '../db/shemaContacts.js';
 
-export const getContacts = async (req, res) => {
-  try {
-    const data = await Contact.find();
-    console.log(data);
-    res.status(200).json({
-      status: 200,
-      message: 'Successfully found contacts!',
-      data,
-    });
-  } catch (error) {
-    res.status(500).json({
-      status: 500,
-      message: `Ops error: ${error.message}`,
-      data: null,
-    });
-  }
+export const getContacts = async () => {
+  const data = await Contact.find();
+  return data;
 };
 
-export const getContactsById = async (req, res) => {
-  const id = req.params.contactId;
-  if (!mongoose.isValidObjectId(id)) {
-    return res.status(400).json({
-      status: 400,
-      message: 'Sorry, id is not valid ',
-    });
-  }
+export const getContactsById = async (id) => {
   const contact = await Contact.findById(id);
+  return contact;
+};
 
-  if (!contact) {
-    return res.status(404).json({
-      status: 404,
-      message: 'Sorry, not found contact ',
-    });
-  }
-  res.json({
-    status: 200,
-    message: `Successfully found contact with id ${id}!`,
-    data: contact,
+export const addContact = async (data) => {
+  const contact = await Contact.create(data);
+  return contact;
+};
+
+export const updateContact = async (contactId, payload, options = {}) => {
+  const rawResult = await Contact.findOneAndUpdate(
+    { _id: contactId },
+    payload,
+    {
+      new: true,
+      includeResultMetadata: true,
+      ...options,
+    },
+  );
+  if (!rawResult || !rawResult.value) return null;
+  return {
+    contact: rawResult.value,
+    isNew: Boolean(rawResult?.lastErrorObject?.upserted),
+  };
+};
+
+export const deleteContact = async (contactId) => {
+  const contact = await Contact.findOneAndDelete({
+    _id: contactId,
   });
+  return contact;
 };

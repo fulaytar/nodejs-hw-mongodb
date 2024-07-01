@@ -1,31 +1,24 @@
 import cors from 'cors';
-import pino from 'pino-http';
 import express from 'express';
 import env from './utils/env.js';
-import { getContacts, getContactsById } from './services/contacts.js';
+import contactsRouter from './routers/contactRouters.js';
+import logger from './middlewares/logger.js';
+
+import errorHandler from './middlewares/errorHandler.js';
+import { notFoundHandler } from './middlewares/notFoundHandler.js';
 
 const port = env('PORT', '3000');
 
 const setupServer = () => {
   const app = express();
 
-  const logger = pino({
-    transport: {
-      target: 'pino-pretty',
-    },
-  });
-
   app.use(logger);
+  app.use(express.json()); // don`t forget
   app.use(cors());
 
-  app.get('/contacts', getContacts);
-  app.get('/contacts/:contactId', getContactsById);
-
-  app.use((req, res) => {
-    res.status(404).json({
-      message: 'Not Found',
-    });
-  });
+  app.use('/contacts', contactsRouter);
+  app.use('*', notFoundHandler);
+  app.use(errorHandler);
 
   app.listen(port, () => console.log(`Server running on port ${port}`));
 };
