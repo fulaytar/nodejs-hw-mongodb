@@ -1,4 +1,4 @@
-import { Contact } from '../db/shemaContacts.js';
+import { Contact } from '../db/models/shemaContacts.js';
 
 export const getContacts = async () => {
   const data = await Contact.find();
@@ -20,7 +20,8 @@ export const updateContact = async (contactId, payload, options = {}) => {
     { _id: contactId },
     payload,
     {
-      new: true,
+      //new: true,
+      //runValidators: true,
       includeResultMetadata: true,
       ...options,
     },
