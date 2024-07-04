@@ -12,7 +12,7 @@ const port = env('PORT', '3000');
 const setupServer = () => {
   const app = express();
 
-  //app.use(logger);
+  app.use(logger);
   app.use(express.json()); // don`t forget
   app.use(cors());
 
