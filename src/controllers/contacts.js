@@ -9,11 +9,14 @@ import createHttpError from 'http-errors';
 import parsePaginationParams from '../utils/parsePaginationParams.js';
 import parseSortParams from '../utils/parseSortParams.js';
 import { contactsFieldList } from '../constants/constants.js';
+import parseContactsFilter from '../utils/parseContactsFilter.js';
 
 export const getContactsController = async (req, res) => {
+  const { query } = req;
   //console.log(req.query); усі параметри запиту
-  const { page, perPage } = parsePaginationParams(req.query);
-  const { sortBy, sortOrder } = parseSortParams(req.query, contactsFieldList);
+  const { page, perPage } = parsePaginationParams(query);
+  const { sortBy, sortOrder } = parseSortParams(query, contactsFieldList);
+  const { type } = parseContactsFilter(query);
 
   const data = await getContacts({ page, perPage, sortBy, sortOrder });
 
