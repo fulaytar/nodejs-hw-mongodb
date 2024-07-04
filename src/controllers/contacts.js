@@ -1,4 +1,3 @@
-
 import {
   addContact,
   deleteContact,
@@ -7,9 +6,17 @@ import {
   updateContact,
 } from '../services/contacts.js';
 import createHttpError from 'http-errors';
+import parsePaginationParams from '../utils/parsePaginationParams.js';
+import parseSortParams from '../utils/parseSortParams.js';
+import { contactsFieldList } from '../constants/constants.js';
 
 export const getContactsController = async (req, res) => {
-  const data = await getContacts();
+  //console.log(req.query); усі параметри запиту
+  const { page, perPage } = parsePaginationParams(req.query);
+  const { sortBy, sortOrder } = parseSortParams(req.query, contactsFieldList);
+
+  const data = await getContacts({ page, perPage, sortBy, sortOrder });
+
   res.status(200).json({
     status: 200,
     message: 'Successfully found contacts!',
@@ -58,9 +65,9 @@ export const updateContactByIdController = async (req, res, next) => {
 export const deleteContactController = async (req, res, next) => {
   const contactId = req.params.contactId;
   const contact = await deleteContact(contactId);
-   if (!contact) {
-     next(createHttpError(404, 'Contact not found'));
-     return;
-   }
-   res.status(204).send();
+  if (!contact) {
+    next(createHttpError(404, 'Contact not found'));
+    return;
+  }
+  res.status(204).send();
 };

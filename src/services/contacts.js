@@ -1,8 +1,34 @@
+import { contactsFieldList, sortOrderList } from '../constants/constants.js';
 import { Contact } from '../db/models/shemaContacts.js';
+import calcPaginationData from '../utils/calcPaginationData.js';
 
-export const getContacts = async () => {
-  const data = await Contact.find();
-  return data;
+export const getContacts = async ({
+  page = 1,
+  perPage,
+  sortBy = contactsFieldList[0],
+  sortOrder = sortOrderList[0],
+}) => {
+  const skip = (page - 1) * perPage;
+  const data = await Contact.find()
+    .skip(skip)
+    .limit(perPage)
+    .sort({ [sortBy]: sortOrder });
+  const totalItems = await Contact.find().countDocuments();
+  const { totalPages, hasNextPage, hasPreviousPage } = calcPaginationData({
+    total: totalItems,
+    page,
+    perPage,
+  });
+
+  return {
+    data,
+    page,
+    perPage,
+    totalItems,
+    totalPages,
+    hasPreviousPage,
+    hasNextPage,
+  };
 };
 
 export const getContactsById = async (id) => {
