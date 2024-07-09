@@ -6,6 +6,7 @@ import logger from './middlewares/logger.js';
 
 import errorHandler from './middlewares/errorHandler.js';
 import { notFoundHandler } from './middlewares/notFoundHandler.js';
+import authRouter from './routers/auth-router.js';
 
 const port = env('PORT', '3000');
 
@@ -17,6 +18,7 @@ const setupServer = () => {
   app.use(cors());
 
   app.use('/contacts', contactsRouter);
+  app.use('/auth', authRouter);
   app.use('*', notFoundHandler);
   app.use(errorHandler);
 
