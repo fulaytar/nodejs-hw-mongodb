@@ -8,5 +8,5 @@ export const signup = async (data) => {
   const hashPassword = await hashValue(password);
 
   //захешували пароль
-  User.create({ ...data, password: hashPassword });
+  return User.create({ ...data, password: hashPassword });
 };

@@ -1,7 +1,7 @@
 import bcrypt from 'bcrypt';
 //хешуємо
 export const hashValue = (value) => {
-  bcrypt.hash(value, 10);
+  return bcrypt.hash(value, 10);
 };
 
 //перевіряємо хеш

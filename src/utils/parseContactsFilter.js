@@ -4,8 +4,7 @@ const parseBoolean = (value) => {
   if (typeof value !== 'string') return;
   if (!booleanList.includes(value)) return;
 
-  const parsedValue = JSON.parse(value);
-  return parsedValue;
+  return value === 'true';
 };
 
 const parseContactFilterParams = ({ type, isFavourite }) => {

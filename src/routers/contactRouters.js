@@ -13,8 +13,12 @@ import {
   createContactsSchema,
   updateContactSchema,
 } from '../validation/contacts_schema.js';
+import authenticate from '../middlewares/authenticate.js';
 
 const contactsRouter = express.Router();
+
+//тут мідлвара на кожний запит
+contactsRouter.use(authenticate);
 
 contactsRouter.get('/', ctrlWrapper(getContactsController));
 

@@ -11,6 +11,10 @@ export const getContacts = async ({
 }) => {
   const request = Contact.find();
   let totalItems = await Contact.find().countDocuments();
+  if (filter.userId) {
+    request.where('userId').equals(filter.userId);
+    totalItems = await Contact.find().merge(request).countDocuments();
+  }
   if (filter.type) {
     request.where('contactType').equals(filter.type);
     totalItems = await Contact.find().merge(request).countDocuments();
@@ -43,8 +47,8 @@ export const getContacts = async ({
   };
 };
 
-export const getContactsById = async (id) => {
-  const contact = await Contact.findById(id);
+export const getContactsByFilter = async (filter) => {
+  const contact = await Contact.findOne(filter);
   return contact;
 };
 
@@ -71,9 +75,10 @@ export const updateContact = async (contactId, payload, options = {}) => {
   };
 };
 
-export const deleteContact = async (contactId) => {
+export const deleteContact = async (contactId, userId) => {
   const contact = await Contact.findOneAndDelete({
     _id: contactId,
+    userId: userId, // Перевіряємо, чи контакт належить користувачу
   });
   return contact;
 };
