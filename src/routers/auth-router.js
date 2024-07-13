@@ -5,7 +5,11 @@ import {
   userSigninSchema,
   userSignupSchema,
 } from '../validation/user_schema.js';
-import { signupController, signinController } from '../controllers/auth.js';
+import {
+  signupController,
+  signinController,
+  refreshController,
+} from '../controllers/auth.js';
 
 const authRouter = Router();
 
@@ -19,5 +23,7 @@ authRouter.post(
   validateBody(userSigninSchema),
   ctrlWrapper(signinController),
 );
+
+authRouter.post('/refresh', ctrlWrapper(refreshController));
 
 export default authRouter;

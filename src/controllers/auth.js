@@ -1,7 +1,22 @@
 import createHttpError from 'http-errors';
 import { signup, findUser } from '../services/auth_services.js';
 import { compareHash } from '../utils/hash.js';
-import { createSession } from '../services/session-services.js';
+import { createSession, findSession } from '../services/session-services.js';
+
+const setupResponseSession = (
+  res,
+  { refreshToken, refreshTokenValidUntil, _id },
+) => {
+  res.cookie('refreshToken', refreshToken, {
+    httpOnly: true,
+    expires: refreshTokenValidUntil,
+  });
+
+  res.cookie('sessionId', _id, {
+    httpOnly: true,
+    expires: refreshTokenValidUntil,
+  });
+};
 
 //реєстрація
 export const signupController = async (req, res) => {
@@ -41,24 +56,42 @@ export const signinController = async (req, res) => {
     throw createHttpError(401, 'Email or password invalid');
   }
 
-  const { refreshToken, accessToken, _id, refreshTokenValidUntil } =
-    await createSession(user._id);
+  const session = await createSession(user._id);
 
-  res.cookie('refreshToken', refreshToken, {
-    httpOnly: true,
-    expires: refreshTokenValidUntil,
-  });
-
-  res.cookie('sessionId', _id, {
-    httpOnly: true,
-    expires: refreshTokenValidUntil,
-  });
+  setupResponseSession(res, session);
 
   res.json({
     status: 200,
     message: 'Successfully logged in an user!',
     data: {
-      accessToken,
+      accessToken: session.accessToken,
+    },
+  });
+};
+
+export const refreshController = async (req, res) => {
+  // console.log(req.cookies);
+  const { refreshToken, sessionId } = req.cookies;
+  const currentSession = await findSession({ _id: sessionId, refreshToken });
+  if (!currentSession) {
+    throw createHttpError(401, 'Session not found');
+  }
+
+  const refreshTokenExpired =
+    new Date() > new Date(currentSession.refreshTokenValidUntil);
+  if (refreshTokenExpired) {
+    throw createHttpError(401, 'Session expired');
+  }
+
+  const newSession = await createSession(currentSession.userId);
+
+  setupResponseSession(res, newSession);
+
+  res.json({
+    status: 200,
+    message: 'Successfully logged in an user!',
+    data: {
+      accessToken: newSession.accessToken,
     },
   });
 };

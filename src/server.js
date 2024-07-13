@@ -1,4 +1,5 @@
 import cors from 'cors';
+import cookieParser from 'cookie-parser';
 import express from 'express';
 import env from './utils/env.js';
 import contactsRouter from './routers/contactRouters.js';
@@ -16,6 +17,7 @@ const setupServer = () => {
   /* app.use(logger); */
   app.use(express.json()); // don`t forget
   app.use(cors());
+  app.use(cookieParser()); //cookies
 
   app.use('/contacts', contactsRouter);
   app.use('/auth', authRouter);
