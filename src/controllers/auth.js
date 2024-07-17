@@ -6,6 +6,8 @@ import {
   findSession,
   deleteSession,
 } from '../services/session-services.js';
+import { requestResetToken } from '../services/auth_services.js';
+import { resetPassword } from '../services/auth_services.js';
 
 const setupResponseSession = (
   res,
@@ -109,4 +111,23 @@ export const signoutController = async (req, res) => {
   res.clearCookie('sessionId');
   res.clearCookie('refreshToken');
   res.status(204).send();
+};
+
+export const requestResetEmailController = async (req, res) => {
+  console.log(req.body.email);
+  await requestResetToken(req.body.email);
+  res.json({
+    message: 'Reset password email was successfully sent!',
+    status: 200,
+    data: {},
+  });
+};
+
+export const resetPasswordController = async (req, res) => {
+  await resetPassword(req.body);
+  res.json({
+    message: 'Password was successfully reset!',
+    status: 200,
+    data: {},
+  });
 };
