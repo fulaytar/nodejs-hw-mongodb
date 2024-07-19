@@ -24,6 +24,10 @@ export const TEMP_UPLOAD_DIR = path.resolve('src', 'temp');
 
 export const TEMP_PUBLIC_DIR = path.resolve('src', 'public');
 
+export const TEMP_PHOTO_DIR = path.resolve('src', 'public', 'photo');
+
+console.log(TEMP_PHOTO_DIR);
+
 export const SMTP = {
   SMTP_HOST: 'SMTP_HOST',
   SMTP_PORT: 'SMTP_PORT',

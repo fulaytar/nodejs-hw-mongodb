@@ -29,8 +29,12 @@ contactsRouter.get(
   ctrlWrapper(getContactsByIdController),
 );
 
+/*  upload.array("photo", 8) */
+/* upload.fields([{name:'photo', maxCount:1}]) */
+
 contactsRouter.post(
   '/',
+  upload.single('photo'),
   validateBody(createContactsSchema),
   ctrlWrapper(addContactController),
 );
@@ -38,6 +42,7 @@ contactsRouter.post(
 contactsRouter.patch(
   '/:contactId',
   isValidId,
+  upload.single('photo'),
   validateBody(updateContactSchema),
   ctrlWrapper(updateContactByIdController),
 );

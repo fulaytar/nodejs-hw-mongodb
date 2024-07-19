@@ -4,6 +4,7 @@ import express from 'express';
 import env from './utils/env.js';
 import contactsRouter from './routers/contactRouters.js';
 import logger from './middlewares/logger.js';
+import { TEMP_PUBLIC_DIR } from './constants/constants.js';
 
 import errorHandler from './middlewares/errorHandler.js';
 import { notFoundHandler } from './middlewares/notFoundHandler.js';
@@ -18,6 +19,7 @@ const setupServer = () => {
   app.use(express.json()); // don`t forget
   app.use(cors());
   app.use(cookieParser()); //cookies
+  app.use(express.static(TEMP_PUBLIC_DIR)); // get static file
 
   app.use('/contacts', contactsRouter);
   app.use('/auth', authRouter);
