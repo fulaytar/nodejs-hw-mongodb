@@ -14,6 +14,7 @@ import {
   updateContactSchema,
 } from '../validation/contacts_schema.js';
 import authenticate from '../middlewares/authenticate.js';
+import upload from '../middlewares/upload.js';
 
 const contactsRouter = express.Router();
 
