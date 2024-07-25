@@ -8,7 +8,12 @@ import {
 } from '../services/session-services.js';
 import { requestResetToken } from '../services/auth_services.js';
 import { resetPassword } from '../services/auth_services.js';
-import { genereteAuthUrl } from '../utils/googleOAuth2.js';
+import {
+  genereteAuthUrl,
+  getGoogleOauthName,
+  validateGoogleOAuthCode,
+} from '../utils/googleOAuth2.js';
+import { randomBytes } from 'node:crypto';
 
 const setupResponseSession = (
   res,
@@ -141,6 +146,39 @@ export const getGoogleOAuthUrlConstroller = async (req, res) => {
     message: 'Google OAuth url generate successfully!',
     data: {
       url,
+    },
+  });
+};
+
+export const authGoogleController = async (req, res) => {
+  const { code } = req.body;
+  const ticket = await validateGoogleOAuthCode(code);
+  const userPayload = ticket.getPayload();
+  //userPayload.given_name, userPayload.family_name
+  if (!userPayload) {
+    throw createHttpError(401);
+  }
+
+  let user = await findUser({ email: userPayload.email });
+
+  if (!user) {
+    const signupData = {
+      email: userPayload.email,
+      password: randomBytes(10),
+      name: getGoogleOauthName(userPayload),
+    };
+    user = await signup(signupData);
+  }
+
+  const session = await createSession(user._id);
+
+  setupResponseSession(res, session);
+
+  res.json({
+    status: 200,
+    message: 'Successfully logged in an user!',
+    data: {
+      accessToken: session.accessToken,
     },
   });
 };
