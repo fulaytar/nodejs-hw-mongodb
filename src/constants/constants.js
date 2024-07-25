@@ -26,6 +26,8 @@ export const TEMP_PUBLIC_DIR = path.resolve('src', 'public');
 
 export const TEMP_PHOTO_DIR = path.resolve('src', 'public', 'photo');
 
+export const SWAGGER_PATH = path.join(process.cwd(), 'docs', 'swagger.json');
+
 export const SMTP = {
   SMTP_HOST: 'SMTP_HOST',
   SMTP_PORT: 'SMTP_PORT',
