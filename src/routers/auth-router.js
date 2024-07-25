@@ -14,6 +14,7 @@ import {
   signoutController,
   requestResetEmailController,
   resetPasswordController,
+  getGoogleOAuthUrlConstroller,
 } from '../controllers/auth.js';
 
 const authRouter = Router();
@@ -38,6 +39,8 @@ authRouter.post(
   validateBody(resetPasswordSchema),
   ctrlWrapper(resetPasswordController),
 );
+
+authRouter.get('/get-oauth-url', ctrlWrapper(getGoogleOAuthUrlConstroller));
 
 authRouter.post('/refresh', ctrlWrapper(refreshController));
 authRouter.post('/logout', ctrlWrapper(signoutController));
